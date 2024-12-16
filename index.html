@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تم اختراقك بنجاح</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+        }
+        h1 {
+            color: red;
+        }
+        #countdown {
+            font-size: 2em;
+            color: red;
+            margin: 20px;
+        }
+        video {
+            display: none;
+            margin: 20px auto;
+            border: 2px solid red;
+        }
+    </style>
+</head>
+<body>
+    <h1>تم اختراقك بنجاح!</h1>
+    <p>لتفادي الاختراق، يجب إطفاء الهاتف بالكامل لمدة ساعة.</p>
+    <p>وهنا عد تنازلي من العشرة إلى الصفر:</p>
+    <div id="countdown">10 ثانية</div>
+    <video id="camera" autoplay></video>
+
+    <script>
+        // إعداد العد التنازلي
+        var countdownDate = new Date().getTime() + 10 * 1000; // 10 ثوانٍ
+        var x = setInterval(function() {
+            var now = new Date().getTime();
+            var distance = countdownDate - now;
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // تحديث العد التنازلي
+            document.getElementById("countdown").innerHTML = seconds + " ثانية";
+
+            // إنهاء العد التنازلي وبدء الكاميرا
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("countdown").innerHTML = "انتهى العد التنازلي!";
+                startCamera();
+            }
+        }, 1000);
+
+        // تشغيل الكاميرا بعد انتهاء العد التنازلي
+        function startCamera() {
+            const video = document.getElementById("camera");
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    video.style.display = "block"; // عرض الكاميرا
+                    video.srcObject = stream;
+                })
+                .catch(function (error) {
+                    alert("لم يتم السماح بفتح الكاميرا.");
+                    console.error(error);
+                });
+        }
+    </script>
+</body>
+</html>
